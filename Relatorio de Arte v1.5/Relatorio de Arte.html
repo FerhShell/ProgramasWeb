@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Gerenciador de Artes Supremo</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body class="dark-mode">
+  <header id="mainHeader">Gerenciador de Artes Supremo</header>
+  
+  <div id="filtroWrapper">
+    <label for="filtroOperadorGlobal">Filtrar por Operador: </label>
+    <select id="filtroOperadorGlobal">
+      <option value="">Todos</option>
+    </select>
+  </div>
+  
+  <nav>
+    <button class="tab-button active" onclick="mostrar('briefing')">Entrada 📝</button>
+    <button class="tab-button" onclick="mostrar('criacao')">Criação 🎨</button>
+    <button class="tab-button" onclick="mostrar('aprovacao')">Conferência ✅</button>
+    <button class="tab-button" onclick="mostrar('produzido')">Saída 📦</button>
+    <button class="tab-button" onclick="mostrar('dashboard')">Estatísticas 📊</button>
+    <button class="tab-button" onclick="mostrar('registros')">Backup 🗂️</button>
+    <button id="toggleMode" onclick="alternarModo()">🌓 Modo Escuro/Claro</button>
+  </nav>
+
+  <section id="briefing" class="active">
+    <h2>Aguardando Operador 📝</h2>
+    <textarea id="descricao"></textarea>
+    <input list="ops" id="operador" placeholder="Operador">
+    <input list="cls" id="cliente" placeholder="Cliente">
+    <datalist id="ops"></datalist>
+    <datalist id="cls"></datalist>
+    <button class="action" onclick="adicionar()">Adicionar</button>
+    <div id="listaBriefing"></div>
+    <div class="pagination" id="pagination-briefing"></div>
+  </section>
+
+  <section id="criacao">
+    <h2>Itens em Produção 🎨</h2>
+    <div id="listaCriacao"></div>
+    <div class="pagination" id="pagination-criacao"></div>
+  </section>
+
+  <section id="aprovacao">
+    <h2>Aguardando Conferência ✅</h2>
+    <div id="listaAprovacao"></div>
+    <div class="pagination" id="pagination-aprovacao"></div>
+  </section>
+
+  <section id="produzido">
+    <h2>Itens Produzidos  📦</h2>
+    <select id="filtroOperadorPDF"></select>
+    <button class="action" onclick="gerarPDF()">Gerar PDF</button>
+    <div id="listaProduzido"></div>
+    <div class="pagination" id="pagination-produzido"></div>
+  </section>
+
+  <section id="registros">
+    <h2>Registros 🗂️</h2>
+    <div id="listaRegistros"></div>
+  </section>
+
+  <section id="dashboard">
+    <h2>Estatísticas 📊</h2>
+    <div id="estatisticas"></div>
+  </section>
+
+  <footer>
+    <button onclick="backup()">Backup</button>
+    <input type="file" onchange="restaurar(event)">
+  </footer>
+
+  <!-- Áudio de clique -->
+  <audio id="click-sound" src="click.mp3" preload="auto"></audio>
+  <script src="script.js"></script>
+</body>
+</html>

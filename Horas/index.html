@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Sistema de Ponto Completo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>🕒📋💼 Ponto de Trabalho</h1>
+
+    <!-- Formulário de marcação -->
+    <div class="form-group">
+      <label for="entrada">Entrada:</label>
+      <input type="time" id="entrada" required>
+    </div>
+    <div class="form-group">
+      <label for="saida">Saída:</label>
+      <input type="time" id="saida" required>
+    </div>
+    <button id="calcularBtn">Registrar Ponto</button>
+
+    <!-- Tabela de registros estilo Excel -->
+    <table id="logTable">
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Entrada</th>
+          <th>Saída</th>
+          <th>Saldo</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Linhas serão inseridas pelo JS -->
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="4"><strong>Saldo Total</strong></td>
+          <td id="totalSaldo">--:--</td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <button id="limparBtn" class="secondary">Limpar Tudo</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

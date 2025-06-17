@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Leitor XML + PDF</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <h1>Leitor XML de Itens Conferidos</h1>
+
+  <label for="operatorName">Operador:</label>
+  <input type="text" id="operatorName" value="" />
+
+  <div id="dropZone">Arraste e solte seu XML aqui ou clique</div>
+
+<label for="dateFilter" style="color:#00ffd0; margin-bottom:5px;">Filtrar por Data:</label>
+<select id="dateFilter" style="padding:8px; border-radius:5px; border:none; background:#1f1f1f; color:#fff; margin-bottom:20px;">
+  <option value="Todas">Todas</option>
+</select>
+
+
+  <table id="resultTable" style="display:none;">
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Cliente</th>
+        <th>OS</th>
+        <th>Cores Gravadas</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <button id="btnGeneratePDF" style="display:none;">Gerar PDF</button>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

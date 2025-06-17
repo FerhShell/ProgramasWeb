@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storage Manager</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #222;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #444;
+        }
+        th {
+            background-color: #333;
+        }
+        tr:nth-child(even) {
+            background-color: #333;
+        }
+        input, button {
+            margin: 10px 0;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+        input[type="text"] {
+            width: calc(100% - 22px);
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Storage Manager</h1>
+    
+    <input type="text" id="search" placeholder="Buscar chave" onkeyup="searchItems()">
+    <input type="text" id="key" placeholder="Chave">
+    <input type="text" id="value" placeholder="Valor">
+    <button onclick="addItem()">Adicionar/Atualizar</button>
+    <button onclick="exportData()">Exportar Dados</button>
+    <input type="file" id="importFile" accept=".json, .csv" class="hidden" onchange="importData(event)">
+    <button onclick="document.getElementById('importFile').click()">Importar Dados</button>
+    <button onclick="clearAll()">Limpar Todos os Dados</button>
+    <button onclick="downloadCSV()">Exportar CSV</button>
+    <button onclick="toggleTheme()">Alternar Tema</button>
+    <table>
+        <thead>
+            <tr>
+                <th>Chave</th>
+                <th>Valor</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody id="storageTable">
+        </tbody>
+    </table>
+
+    <script>
+        let isDarkTheme = true;
+
+        function displayStorage() {
+            const tableBody = document.getElementById('storageTable');
+            const search = document.getElementById('search').value.toLowerCase();
+            tableBody.innerHTML = '';
+            for (const [key, value] of Object.entries(localStorage)) {
+                if (key.toLowerCase().includes(search)) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${key}</td>
+                        <td>${value}</td>
+                        <td>
+                            <button onclick="editItem('${key}')">Editar</button>
+                            <button onclick="deleteItem('${key}')">Excluir</button>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                }
+            }
+        }
+
+        function addItem() {
+            const key = document.getElementById('key').value;
+            const value = document.getElementById('value').value;
+            if (key && value) {
+                localStorage.setItem(key, value);
+                displayStorage();
+            }
+        }
+
+        function editItem(key) {
+            const value = localStorage.getItem(key);
+            document.getElementById('key').value = key;
+            document.getElementById('value').value = value;
+        }
+
+        function deleteItem(key) {
+            localStorage.removeItem(key);
+            displayStorage();
+        }
+
+        function exportData() {
+            const data = JSON.stringify(localStorage);
+            const blob = new Blob([data], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'localStorage-backup.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const data = JSON.parse(e.target.result);
+                for (const [key, value] of Object.entries(data)) {
+                    localStorage.setItem(key, value);
+                }
+                displayStorage();
+            };
+            reader.readAsText(file);
+        }
+
+        function downloadCSV() {
+            const csvRows = [];
+            const headers = ['Chave', 'Valor'];
+            csvRows.push(headers.join(','));
+            for (const [key, value] of Object.entries(localStorage)) {
+                csvRows.push([key, value].join(','));
+            }
+            const csvString = csvRows.join('\n');
+            const blob = new Blob([csvString], {type: 'text/csv'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'localStorage-data.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function clearAll() {
+            if (confirm("Você tem certeza que deseja excluir todos os dados do localStorage?")) {
+                localStorage.clear();
+                displayStorage();
+            }
+        }
+
+        function searchItems() {
+            displayStorage();
+        }
+
+        function toggleTheme() {
+            isDarkTheme = !isDarkTheme;
+            document.body.style.backgroundColor = isDarkTheme ? '#222' : '#f0f0f0';
+            document.body.style.color = isDarkTheme ? '#fff' : '#000';
+            document.querySelectorAll('table, th, td').forEach(el => {
+                el.style.backgroundColor = isDarkTheme ? '#333' : '#fff';
+                el.style.color = isDarkTheme ? '#fff' : '#000';
+                el.style.borderColor = isDarkTheme ? '#444' : '#ddd';
+            });
+        }
+
+        // Initialize storage table on load
+        displayStorage();
+    </script>
+</body>
+</html>

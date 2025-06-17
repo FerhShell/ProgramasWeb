@@ -1,0 +1,209 @@
+/* ===== Estilo Base ===== */
+:root {
+  --cor-principal: #0ff;
+  --cor-secundaria: #08c;
+  --fundo-escuro: #1a1a1a;
+  --fundo-claro: #f0f0f0;
+  --texto-claro: #fff;
+  --texto-escuro: #000;
+  --radius: 8px;
+  --transition: 0.3s;
+}
+
+body {
+  position: relative;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #121212;
+  color: var(--texto-claro);
+  transition: background-color var(--transition), color var(--transition);
+}
+body.light-mode {
+  background: var(--fundo-claro);
+  color: var(--texto-escuro);
+}
+
+header, footer, nav {
+  text-align: center;
+  padding: 1rem;
+  background: var(--fundo-escuro);
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* ===== Navegação ===== */
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+nav button.tab-button,
+nav button#toggleMode,
+.action {
+  margin: 0.5rem;
+  padding: 0.7rem 1rem;
+  border: none;
+  border-radius: var(--radius);
+  font-weight: bold;
+  cursor: pointer;
+  background: var(--fundo-escuro);
+  color: var(--cor-principal);
+  box-shadow: 0 0 8px var(--cor-principal);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+nav button.tab-button.active,
+nav button.tab-button:hover,
+.action:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 12px var(--cor-principal);
+}
+nav button#toggleMode {
+  background: var(--cor-principal);
+  color: var(--texto-escuro);
+}
+
+/* ===== Sections ===== */
+section {
+  display: none;
+  padding: 1rem;
+  animation: fadeIn var(--transition) ease;
+}
+section.active {
+  display: block;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== Inputs ===== */
+input, select, textarea {
+  width: 100%;
+  margin: 0.5rem 0;
+  padding: 0.7rem;
+  border-radius: var(--radius);
+  background: #1f1f1f;
+  color: var(--cor-principal);
+  border: 1px solid var(--cor-principal);
+}
+
+/* ===== Cards ===== */
+.item, .month, .day {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(5px);
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: var(--radius);
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+}
+
+/* ===== Botões Internos ===== */
+.botoes button {
+  margin-right: 0.5rem;
+  padding: 0.5rem 0.8rem;
+  border: 2px solid var(--cor-principal);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--cor-principal);
+  font-weight: bold;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+.botoes button:hover {
+  background: var(--cor-principal);
+  color: var(--texto-escuro);
+}
+
+/* ===== Timeline ===== */
+.timeline {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 5%;
+  right: 5%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--cor-principal), var(--cor-secundaria));
+  transform: translateY(-50%);
+  border-radius: 2px;
+}
+.timeline-item {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  cursor: pointer;
+  transition: transform var(--transition);
+}
+.timeline-item:hover {
+  transform: scale(1.2);
+}
+.timeline-item span {
+  color: var(--cor-principal);
+  font-size: 0.8rem;
+}
+
+/* ===== Meses Colapsáveis ===== */
+.month {
+  border: 1px solid var(--cor-principal);
+}
+.month-header {
+  padding: 0.8rem;
+  background: var(--cor-principal);
+  color: var(--texto-escuro);
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+.month-content {
+  display: none;
+  padding: 0.5rem 1rem;
+  background: var(--fundo-escuro);
+  border-radius: 0 0 var(--radius) var(--radius);
+}
+.month.expanded .month-content {
+  display: block;
+}
+
+/* ===== Scrollbar ===== */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #1f1f1f;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--cor-principal);
+  border-radius: var(--radius);
+}
+
+/* ===== Collapsible Days ===== */
+.day h3 {
+  margin: 0.5rem 0;
+  color: var(--cor-principal);
+}
+
+/* ===== Estatísticas ===== */
+#estatisticas p {
+  margin: 0.3rem 0;
+}
+
+/* ===== Misc ===== */
+html {
+  scroll-behavior: smooth;
+}
