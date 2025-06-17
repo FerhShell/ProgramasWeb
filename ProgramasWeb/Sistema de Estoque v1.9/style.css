@@ -1,0 +1,466 @@
+/* ============================= */
+/*       ESTILO GERAL / RESET    */
+/* ============================= */
+
+/* Define variáveis CSS para cores principais do tema escuro */
+:root { /* Início do bloco de variáveis globais */
+  --bg: #121212; /* Cor de fundo principal (fundo escuro) */
+  --fg: #e0e0e0; /* Cor do texto principal (cinza claro) */
+  --accent: #bb86fc; /* Cor de destaque/neon para elementos chamativos */
+  --panel: #1e1e1e; /* Cor de fundo para painéis e seções internas */
+  --hover: #272727; /* Cor de fundo para estados de hover (passar o mouse) */
+  --notif-bg: rgba(0, 0, 0, 0.8); /* Cor de fundo semi-transparente para notificações */
+  --notif-success: #4caf50; /* Cor verde para notificações de sucesso */
+  --notif-error: #f44336; /* Cor vermelha para notificações de erro */
+  --notif-info: #2196f3; /* Cor azul para notificações informativas */
+} /* Fim do bloco :root */
+
+/* Cria um fundo animado com gradiente neon usando pseudo-elemento */
+body::before { /* Pseudo-elemento cobrindo toda a tela */
+  content: ""; /* Conteúdo vazio, usado apenas para o fundo */
+  position: fixed; /* Fixa a posição na viewport */
+  top: 0; /* Alinha ao topo da página */
+  left: 0; /* Alinha à esquerda da página */
+  width: 100%; /* Largura total da tela */
+  height: 100%; /* Altura total da tela */
+  background: linear-gradient(45deg, #000000, #1C1C1C, #363636, #4F4F4F, #696969, 	#A9A9A9); /* Gradiente em 45 graus com cores neon */
+  background-size: 400% 400%; /* Dimensiona o gradiente para efeito de transição suave */
+  animation: gradientBG 20s ease infinite; /* Animação chamativa de 20 segundos, loop infinito */
+  z-index: -1; /* Envia o pseudo-elemento para trás de todo o conteúdo */
+} /* Fim do body::before */
+
+/* Define a animação gradientBG para movimentar o gradiente */
+@keyframes gradientBG { /* Início da keyframe */
+  0% { background-position: 0% 50%; } /* Ponto inicial do movimento do gradiente */
+  50% { background-position: 100% 50%; } /* Meio do ciclo: gradiente totalmente deslocado horizontalmente */
+  100% { background-position: 0% 50%; } /* Final do ciclo, volta à posição inicial */
+} /* Fim da keyframe gradientBG */
+
+/* Reset básico de box-sizing e transições suaves */
+* { /* Seleciona todos os elementos */
+  box-sizing: border-box; /* Inclui padding e border dentro da largura/altura */
+  transition: all 0.3s ease; /* Transição padrão para todas as propriedades em 0.3s */
+} /* Fim do reset global */
+
+/* Estilização básica para o elemento body */
+body { /* Aplicado ao elemento <body> */
+  margin: 0; /* Remove margens padrão */
+  padding: 0; /* Remove espaços internos padrão */
+  background: var(--bg); /* Cor de fundo definida por variável --bg */
+  color: var(--fg); /* Cor do texto definida por variável --fg */
+  font-family: 'Segoe UI', sans-serif; /* Fonte principal do sistema */
+  overflow-x: hidden; /* Impede scroll horizontal indesejado */
+} /* Fim da estilização do body */
+
+/* Estilo do container principal que engloba todo o conteúdo */
+.container { /* Seleciona o elemento com classe .container */
+  max-width: 1200px; /* Largura máxima do container */
+  margin: 2rem auto; /* Centraliza horizontalmente e dá margem superior/inferior */
+  padding: 1rem; /* Espaçamento interno de 1rem */
+  background: rgba(255, 255, 255, 0.03); /* Fundo levemente translúcido para contraste */
+  border-radius: 8px; /* Bordas arredondadas de 8px */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8); /* Sombra suave por trás do container */
+} /* Fim do container */
+
+/* Estilo do título principal (h1) */
+h1 { /* Seleciona o elemento <h1> */
+  text-align: center; /* Centraliza o texto */
+  margin-bottom: 1.5rem; /* Espaçamento inferior de 1.5rem */
+  color: #ffffff; /* Cor do texto definida por variável --accent */
+  text-shadow: 0 0 30px ar(--accent); /* Sombra externa neon para realçar */
+  animation: neonGlow 2s ease-in-out infinite alternate; /* Animação de brilho neon */
+} /* Fim do estilo do h1 */
+
+/* Define a animação neonGlow para pulsar o efeito neon do texto */
+@keyframes neonGlow { /* Início da keyframe neonGlow */
+  from { /* Início do ciclo */
+    text-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent); /* Brilho menor */
+  }
+  to { /* Fim do ciclo */
+    text-shadow: 0 0 20px var(--accent), 0 0 30px var(--accent), 0 0 40px var(--accent); /* Brilho maior */
+  }
+} /* Fim da keyframe neonGlow */
+
+/* ============================= */
+/*        POP-UPS / NOTIFICAÇÕES */
+/* ============================= */
+
+/* Container para posicionar notificações pop-up no canto superior direito */
+#notification-container { /* Seleciona o elemento com id #notification-container */
+  position: fixed; /* Fixa posição na viewport */
+  top: 1rem; /* Distância de 1rem do topo */
+  right: 1rem; /* Distância de 1rem da direita */
+  display: flex; /* Usa flexbox para alinhar notificações verticalmente */
+  flex-direction: column; /* Empilha notificações de cima para baixo */
+  gap: 0.5rem; /* Espaçamento de 0.5rem entre notificações */
+  z-index: 9999; /* Exibe acima de quase todo o conteúdo */
+} /* Fim do container de notificações */
+
+/* Estilo base para cada notificação pop-up */
+.notification { /* Seleciona elementos com classe .notification */
+  min-width: 250px; /* Largura mínima para que o texto caiba */
+  padding: 1rem 1.25rem; /* Espaçamento interno vertical e horizontal */
+  border-radius: 8px; /* Bordas arredondadas */
+  color: #fff; /* Cor do texto das notificações (branco) */
+  font-weight: bold; /* Texto em negrito */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.7); /* Sombra suave por trás da notificação */
+  position: relative; /* Necessário para animações de entrada/saída */
+  overflow: hidden; /* Esconde conteúdo que ultrapassa o contêiner */
+  animation: slideIn 0.4s ease-out, fadeOut 0.4s ease-in 3s forwards; /* Animação de entrada e saída */
+} /* Fim do estilo .notification */
+
+/* Cor de fundo para notificações de sucesso */
+.notification.success { /* Seleciona notificações com classes .notification e .success */
+  background-color: var(--notif-success); /* Usa variável --notif-success (verde) */
+} /* Fim .notification.success */
+
+/* Cor de fundo para notificações de erro */
+.notification.error { /* Seleciona notificações com classes .notification e .error */
+  background-color: var(--notif-error); /* Usa variável --notif-error (vermelho) */
+} /* Fim .notification.error */
+
+/* Cor de fundo para notificações informativas */
+.notification.info { /* Seleciona notificações com classes .notification e .info */
+  background-color: var(--notif-info); /* Usa variável --notif-info (azul) */
+} /* Fim .notification.info */
+
+/* Animação que faz a notificação deslizar da direita para aparecer */
+@keyframes slideIn { /* Início da keyframe slideIn */
+  from { transform: translateX(300px); opacity: 0; } /* Sai à direita e invisível */
+  to   { transform: translateX(0); opacity: 1; }   /* Chega à posição original e visível */
+} /* Fim da keyframe slideIn */
+
+/* Animação que desvanece a notificação após 3 segundos */
+@keyframes fadeOut { /* Início da keyframe fadeOut */
+  to { opacity: 0; height: 0; margin: 0; padding: 0; } /* Fica invisível e some em dimensões */
+} /* Fim da keyframe fadeOut */
+
+/* ============================= */
+/*          ABAS (tabs)          */
+/* ============================= */
+
+/* Container das abas de seleção de material */
+.tabs { /* Seleciona elemento com classe .tabs */
+  display: flex; /* Usa flexbox para colocar abas lado a lado */
+  border-bottom: 2px solid #333; /* Linha inferior para separar as abas */
+  margin-bottom: 1rem; /* Espaçamento inferior de 1rem */
+  perspective: 1000px; /* Configura perspectiva 3D para efeitos de hover */
+} /* Fim do container .tabs */
+
+/* Estilo de cada botão de aba */
+.tabs button { /* Seleciona elementos <button> dentro de .tabs */
+  flex: 1; /* Cada botão ocupa igualmente o espaço disponível */
+  padding: 0.75rem; /* Espaçamento interno de 0.75rem */
+  background: var(--panel); /* Fundo definido pela variável --panel */
+  border: none; /* Remove bordas padrão */
+  cursor: pointer; /* Cursor aponta que é clicável */
+  color: var(--fg); /* Cor do texto definida por variável --fg */
+  font-weight: bold; /* Texto em negrito */
+  position: relative; /* Necessário para pseudo-elementos internos */
+  transform: translateZ(0); /* Inicialização para transform 3D */
+  border-radius: 6px; /* Bordas arredondadas de 6px */
+} /* Fim de .tabs button */
+
+/* Efeito ao passar o mouse sobre cada aba */
+.tabs button:hover { /* Seleciona botões .tabs quando em hover */
+  transform: translateY(-5px) rotateX(10deg); /* Leva o botão pra cima e rotaciona levemente em 3D */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5), 0 0 10px var(--accent); /* Sombra de destaque e brilho neon */
+} /* Fim de .tabs button:hover */
+
+/* Barrinha animada embaixo da aba ao passar o mouse */
+.tabs button::after { /* Pseudo-elemento após cada botão */
+  content: ''; /* Conteúdo vazio */
+  position: absolute; /* Posição absoluta dentro do botão */
+  bottom: 0; /* Alinha ao rodapé do botão */
+  left: 50%; /* Começa no meio horizontalmente */
+  right: 50%; /* Termina no meio horizontalmente (invisível) */
+  height: 3px; /* Altura da barrinha: 3px */
+  background: var(--accent); /* Cor da barrinha definida pela variável --accent */
+  transition: left 0.3s ease, right 0.3s ease; /* Animação suave ao mudar largura */
+} /* Fim de .tabs button::after */
+
+/* Expande a barrinha para a largura completa quando em hover */
+.tabs button:hover::after { /* Pseudo-elemento após botão em hover */
+  left: 0; /* Inicia à esquerda do botão */
+  right: 0; /* Termina à direita do botão */
+} /* Fim de .tabs button:hover::after */
+
+/* Estilo da aba ativa (selecionada) */
+.tabs button.active { /* Seleciona botões com classe .active */
+  background: var(--accent); /* Fundo em cor de destaque neon */
+  color: #121212; /* Texto escuro para contraste com fundo neon */
+  box-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent); /* Sombra neon intensa */
+  animation: neonBlink 1.5s infinite; /* Animação de piscar neon contínua */
+  transform: translateY(-2px) rotateX(5deg); /* Leve elevação em 3D */
+} /* Fim de .tabs button.active */
+
+/* Define animação neonBlink para a aba ativa piscar */
+@keyframes neonBlink { /* Início da keyframe neonBlink */
+  0%, 100% { /* No início e fim do ciclo */
+    box-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent); /* Sombra padrão */
+  }
+  50% { /* No meio do ciclo */
+    box-shadow: 0 0 20px var(--accent), 0 0 30px var(--accent); /* Sombra multiplicada para maior brilho */
+  }
+} /* Fim da keyframe neonBlink */
+
+/* Foco visível para acessibilidade em botões e selects */
+.tabs button:focus, /* Botões em foco */
+.filters button:focus, /* Botões de filtros em foco */
+.filters select:focus, /* Selects de filtros em foco */
+.section-controls button:focus { /* Botões de seção em foco */
+  outline: 2px solid var(--accent); /* Borda externa neon para foco */
+  outline-offset: 2px; /* Espaçamento entre foco e elemento */
+} /* Fim do estilo de foco */
+
+/* ============================= */
+/*        FILTROS E BOTÕES       */
+/* ============================= */
+
+/* Container para filtros (mês, dia, botões de filtro) */
+.filters { /* Seleciona elemento com classe .filters */
+  display: flex; /* Usa flexbox para alinhar itens */
+  gap: 1rem; /* Espaçamento de 1rem entre cada item */
+  margin-bottom: 1rem; /* Espaçamento inferior */
+  flex-wrap: wrap; /* Permite que itens quebrem linha se necessário */
+} /* Fim do .filters */
+
+/* Estilo padrão para selects e botões dentro de .filters */
+.filters select, /* Seleciona <select> dentro de .filters */
+.filters button { /* Seleciona <button> dentro de .filters */
+  padding: 0.5rem 1rem; /* Espaçamento interno vertical e horizontal */
+  background: var(--panel); /* Fundo definido pela variável --panel */
+  border: none; /* Remove bordas padrão */
+  color: var(--fg); /* Cor do texto definida pela variável --fg */
+  cursor: pointer; /* Cursor indica clique */
+  border-radius: 6px; /* Bordas arredondadas */
+} /* Fim de .filters select, .filters button */
+
+/* Efeito de hover para selects e botões de filtros */
+.filters select:hover, /* Hover em <select> */
+.filters button:hover { /* Hover em <button> */
+  background: var(--hover); /* Muda o fundo para variável --hover */
+  box-shadow: 0 0 5px var(--accent); /* Adiciona sombra neon suave */
+} /* Fim de .filters select:hover, .filters button:hover */
+
+/* ============================= */
+/*       CONTEÚDO PRINCIPAL      */
+/* ============================= */
+
+/* Container que envolve o conteúdo da aba selecionada */
+.tab-content { /* Seleciona elemento com classe .tab-content */
+  background: var(--panel); /* Fundo definido pela variável --panel */
+  padding: 1rem; /* Espaçamento interno de 1rem */
+  border-radius: 0 0 8px 8px; /* Bordas arredondadas apenas na parte inferior */
+} /* Fim do .tab-content */
+
+/* CONTROLES de entrada/retirada (inputs e botões) */
+.section-controls { /* Seleciona elemento com classe .section-controls */
+  display: flex; /* Usa flexbox */
+  gap: 0.5rem; /* Espaçamento de 0.5rem entre cada item */
+  margin-bottom: 1rem; /* Espaçamento inferior de 1rem */
+  flex-wrap: wrap; /* Permite quebra de linha */
+} /* Fim do .section-controls */
+
+/* Estilo para inputs e botões dentro de .section-controls */
+.section-controls input, /* Seleciona <input> dentro de .section-controls */
+.section-controls button { /* Seleciona <button> dentro de .section-controls */
+  padding: 0.5rem 1rem; /* Espaçamento interno de 0.5rem vertical e 1rem horizontal */
+  border: none; /* Remove bordas padrão */
+  border-radius: 4px; /* Bordas arredondadas de 4px */
+  background: var(--hover); /* Fundo definido pela variável --hover */
+  color: var(--fg); /* Cor do texto definida pela variável --fg */
+} /* Fim de .section-controls input, .section-controls button */
+
+/* Fundo diferenciado para inputs dentro de .section-controls */
+.section-controls input { /* Seleciona apenas <input> dentro de .section-controls */
+  background: var(--panel); /* Fundo definido pela variável --panel */
+  border: 1px solid var(--hover); /* Borda sutil com cor --hover */
+} /* Fim do .section-controls input */
+
+/* Estilo específico para botões dentro de .section-controls */
+.section-controls button { /* Seleciona apenas <button> dentro de .section-controls */
+  background: var(--accent); /* Fundo definido pela variável --accent */
+  color: #121212; /* Cor do texto escura para contraste */
+} /* Fim do .section-controls button */
+
+/* Efeito hover/ativo para botões em .section-controls */
+.section-controls button:hover, /* Hover em botões */
+.section-controls button:active { /* Estado ativo/clicado em botões */
+  box-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent); /* Sombra neon intensa */
+} /* Fim de .section-controls button:hover, .section-controls button:active */
+
+/* ============================= */
+/*        TABELAS DE REGISTROS   */
+/* ============================= */
+
+/* Estilo base para tabelas de registros */
+.record-table { /* Seleciona elemento com classe .record-table */
+  width: 100%; /* Largura total do contêiner pai */
+  border-collapse: collapse; /* Remove espaçamento entre bordas de células */
+  margin-bottom: 1rem; /* Espaçamento inferior */
+} /* Fim do .record-table */
+
+/* Estilo para células (th e td) dentro de .record-table */
+.record-table th, /* Seleciona <th> dentro de .record-table */
+.record-table td { /* Seleciona <td> dentro de .record-table */
+  border: 1px solid #333; /* Borda sólida de 1px com cor #333 */
+  padding: 0.5rem; /* Espaçamento interno de 0.5rem */
+  text-align: center; /* Centraliza texto dentro das células */
+} /* Fim de .record-table th, .record-table td */
+
+/* Estilo para cabeçalho da tabela */
+.record-table th { /* Seleciona apenas <th> dentro de .record-table */
+  background: #282828; /* Fundo escuro para diferenciar cabeçalho */
+} /* Fim do .record-table th */
+
+/* ============================= */
+/*           SALDO               */
+/* ============================= */
+
+/* Exibe o saldo atual de placas na parte inferior do conteúdo */
+.total-balance { /* Seleciona elemento com classe .total-balance */
+  text-align: right; /* Alinha texto à direita */
+  font-weight: bold; /* Texto em negrito */
+  margin-top: 1rem; /* Espaçamento superior de 1rem */
+  color: var(--accent); /* Cor do texto definida pela variável --accent */
+  text-shadow: 0 0 5px var(--accent); /* Sombra neon suave para destaque */
+} /* Fim do .total-balance */
+
+/* ============================= */
+/*     ALERTA DE ESTOQUE BAIXO   */
+/* ============================= */
+
+/* Estilo para alerta de estoque baixo quando saldo < mínimo */
+.alerta-baixo { /* Seleciona elemento com classe .alerta-baixo */
+  background: #ff0000; /* Fundo vermelho */
+  color: #fff; /* Texto branco */
+  padding: 20px; /* Espaçamento interno */
+  margin-bottom: 1.5rem; /* Espaçamento inferior */
+  border-radius: 10px; /* Bordas arredondadas */
+  text-align: center; /* Centraliza o texto */
+  font-weight: bold; /* Texto em negrito */
+  box-shadow: 0 0 20px #ff0000; /* Sombra vermelha pulsante */
+  animation: alertaPiscar 0.8s infinite alternate; /* Animação de piscar */
+} /* Fim do .alerta-baixo */
+
+/* Define animação alertaPiscar para o alerta de estoque baixo */
+@keyframes alertaPiscar { /* Início da keyframe alertaPiscar */
+  0% { /* Início do ciclo */
+    transform: scale(1); /* Escala normal */
+    opacity: 1; /* Totalmente visível */
+  }
+  100% { /* Fim do ciclo */
+    transform: scale(1.02); /* Leve aumento de escala */
+    opacity: 0.6; /* Leve transparência */
+  }
+} /* Fim da keyframe alertaPiscar */
+
+/* ============================= */
+/*     DROPDOWN DE MESES E DIAS  */
+/* ============================= */
+
+/* Container para cada bloco de mês e de dias (opções expansíveis) */
+.mes-dropdown, /* Seleciona elemento com classe .mes-dropdown */
+.dia-dropdown { /* Seleciona elemento com classe .dia-dropdown */
+  border: 1px solid #333; /* Borda sólida cinza escuro */
+  margin-bottom: 0.5rem; /* Espaçamento inferior */
+  border-radius: 6px; /* Bordas arredondadas */
+  overflow: hidden; /* Oculta conteúdo que ultrapassar o contêiner */
+} /* Fim de .mes-dropdown, .dia-dropdown */
+
+/* Cabeçalho clicável de cada dropdown (ícone + texto) */
+.mes-dropdown .dropdown-header, /* Seleciona .dropdown-header dentro de .mes-dropdown */
+.dia-dropdown .dropdown-header { /* Seleciona .dropdown-header dentro de .dia-dropdown */
+  display: flex; /* Usa flexbox para alinhar ícone e texto */
+  align-items: center; /* Alinha verticalmente centralizado */
+  gap: 0.5rem; /* Espaçamento entre ícone e texto */
+  background: var(--panel); /* Fundo definido pela variável --panel */
+  padding: 0.5rem; /* Espaçamento interno de 0.5rem */
+  cursor: pointer; /* Cursor indica que é clicável */
+  user-select: none; /* Impede seleção de texto ao clicar */
+} /* Fim de .dropdown-header */
+
+/* Estilo para o ícone do dropdown (seta que gira) */
+.mes-dropdown .dropdown-icon, /* Seleciona .dropdown-icon dentro de .mes-dropdown */
+.dia-dropdown .dropdown-icon { /* Seleciona .dropdown-icon dentro de .dia-dropdown */
+  transition: transform 0.3s ease; /* Animação suave para rotação */
+  display: inline-block; /* Exibe como blocos inline */
+  width: 1rem; /* Largura de 1rem */
+  text-align: center; /* Centraliza o conteúdo do ícone */
+} /* Fim de .dropdown-icon */
+
+/* Conteúdo escondido por padrão dentro do dropdown */
+.mes-dropdown .dropdown-content, /* Seleciona .dropdown-content dentro de .mes-dropdown */
+.dia-dropdown .dropdown-content { /* Seleciona .dropdown-content dentro de .dia-dropdown */
+  max-height: 0; /* Altura zero, esconde o conteúdo */
+  overflow: hidden; /* Oculta o conteúdo que ultrapassa a altura zero */
+  transition: max-height 0.4s ease; /* Animação para expandir conteúdo */
+} /* Fim de .dropdown-content */
+
+/* Quando o dropdown estiver aberto, expande o conteúdo */
+.mes-dropdown.open .dropdown-content, /* Seleciona .dropdown-content quando pai .mes-dropdown tem classe .open */
+.dia-dropdown.open .dropdown-content { /* Seleciona .dropdown-content quando pai .dia-dropdown tem classe .open */
+  max-height: 1000px; /* Altura suficiente para exibir todo o conteúdo */
+} /* Fim de .dropdown-content aberto */
+
+/* Gira o ícone ▶ em 90° quando o dropdown está aberto */
+.mes-dropdown.open .dropdown-icon, /* Seleciona .dropdown-icon quando pai .mes-dropdown tem classe .open */
+.dia-dropdown.open .dropdown-icon { /* Seleciona .dropdown-icon quando pai .dia-dropdown tem classe .open */
+  transform: rotate(90deg); /* Rotaciona 90 graus */
+} /* Fim da rotação do ícone */
+
+/* ============================= */
+/*     BOTÃO “X” PARA EXCLUIR    */
+/* ============================= */
+
+/* Estilo para o botão de excluir registro (ícone em formato “X”) */
+.btn-excluir { /* Seleciona elemento com classe .btn-excluir */
+  background: #ff4d4d; /* Fundo vermelho claro */
+  border: none; /* Remove bordas padrão */
+  color: #fff; /* Texto branco para contraste */
+  margin-left: 0.5rem; /* Espaçamento à esquerda para separar de texto */
+  padding: 0.2rem 0.5rem; /* Espaçamento interno pequeno */
+  border-radius: 50%; /* Forma circular */
+  cursor: pointer; /* Cursor indica clicável */
+  font-weight: bold; /* Texto em negrito */
+  font-size: 1rem; /* Tamanho de fonte de 1rem */
+  line-height: 1; /* Altura de linha igual a 1 */
+  transition: background 0.3s ease, transform 0.3s ease; /* Animações suaves de cor e escala */
+} /* Fim de .btn-excluir */
+
+/* Efeito de hover para botão de excluir */
+.btn-excluir:hover { /* Seleciona .btn-excluir em hover */
+  background: #ff0000; /* Fundo vermelho mais intenso */
+  transform: scale(1.1); /* Aumenta levemente de tamanho */
+} /* Fim de .btn-excluir:hover */
+
+/* ============================= */
+/*           RODAPÉ              */
+/* ============================= */
+
+/* Estilo do rodapé com relógio */
+#rodapeRelogio { /* Seleciona elemento com id #rodapeRelogio */
+  position: fixed; /* Fixa na parte inferior da janela */
+  bottom: 0; /* Alinha ao fundo da página */
+  width: 100%; /* Ocupa toda a largura da tela */
+  background: #1e1e1e; /* Fundo escuro definido manualmente */
+  color: var(--accent); /* Cor do texto definida pela variável --accent */
+  text-align: center; /* Centraliza texto no rodapé */
+  padding: 8px 0; /* Espaçamento vertical de 8px */
+  font-family: monospace; /* Fonte monoespaçada para estilo de relógio */
+  font-size: 1rem; /* Tamanho da fonte de 1rem */
+  z-index: 1000; /* Exibe acima de conteúdo principal, mas abaixo das notificações */
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.8); /* Sombra suave acima do rodapé */
+  animation: pulseNeon 2s infinite alternate; /* Animação de pulso neon contínua */
+} /* Fim de #rodapeRelogio */
+
+/* Define animação pulseNeon para o texto do relógio pulsar */
+@keyframes pulseNeon { /* Início da keyframe pulseNeon */
+  0% { /* Início do ciclo */
+    text-shadow: 0 0 5px var(--accent); /* Sombra neon menor */
+  }
+  100% { /* Fim do ciclo */
+    text-shadow: 0 0 15px var(--accent); /* Sombra neon maior */
+  }
+} /* Fim da keyframe pulseNeon */

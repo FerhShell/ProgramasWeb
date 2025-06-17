@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora Flexográfica Melhorada</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #0d0d0d;
+      color: #e0e0e0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(10,10,10,0.8);
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+
+    .logo {
+      font-size: 1.5em;
+      font-weight: 600;
+      color: #00e6e6;
+    }
+
+    nav {
+      display: flex;
+      gap: 10px;
+    }
+
+    nav button {
+      background: transparent;
+      border: none;
+      color: #e0e0e0;
+      padding: 10px 15px;
+      cursor: pointer;
+      position: relative;
+      transition: color .3s;
+      font-weight: 500;
+    }
+
+    nav button::after {
+      content: '';
+      position: absolute;
+      left: 10%;
+      right: 10%;
+      bottom: 5px;
+      height: 2px;
+      background: transparent;
+      transition: background .3s;
+    }
+
+    nav button:hover,
+    nav button.active {
+      color: #00e6e6;
+    }
+
+    nav button.active::after {
+      background: #00e6e6;
+    }
+
+    main {
+      flex: 1;
+      padding: 100px 20px 60px;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+    }
+
+    .calculator-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      width: 100%;
+      justify-items: center;
+    }
+
+    .calculator {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(5px);
+      border-radius: 12px;
+      padding: 20px;
+      transition: transform .3s, box-shadow .3s;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .calculator:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 20px rgba(0, 230, 230, 0.5);
+    }
+
+    .calculator h2 {
+      margin: 0 0 10px;
+      color: #00e6e6;
+      font-size: 1.4em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .calculator input,
+    .calculator select {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      background: #1a1a1a;
+      border: 2px solid #333;
+      border-radius: 6px;
+      transition: border .3s, box-shadow .3s;
+      color: #ffffff; /* <-- COR DO TEXTO BRANCA */
+    }
+
+    .calculator input::placeholder {
+      color: #aaa; /* <-- COR DO PLACEHOLDER */
+    }
+
+    .calculator input:focus,
+    .calculator select:focus {
+      border-color: #00e6e6;
+      box-shadow: 0 0 5px #00e6e6;
+      outline: none;
+    }
+
+    .calculator button {
+      padding: 10px 20px;
+      margin: 5px 5px 5px 0;
+      border: none;
+      border-radius: 6px;
+      background: #00e6e6;
+      color: #0d0d0d;
+      cursor: pointer;
+      transition: transform .2s, box-shadow .2s;
+      font-weight: 500;
+    }
+
+    .calculator button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 10px rgba(0, 230, 230, 0.7);
+    }
+
+    .resultado {
+      font-size: 1.2em;
+      margin: 10px 0;
+      text-align: center;
+    }
+
+    .historico {
+      font-size: 0.9em;
+      opacity: .8;
+      max-height: 150px;
+      overflow-y: auto;
+    }
+
+    #toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #333;
+      color: #e0e0e0;
+      padding: 12px 20px;
+      border-radius: 6px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s;
+    }
+
+    #toast.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    footer {
+      text-align: center;
+      padding: 10px;
+      background: rgba(10,10,10,0.8);
+      backdrop-filter: blur(5px);
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      color: #e0e0e0;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+ 
+
+ <header>
+    <div class="logo"><i class="fas fa-cogs"></i> FlexoCalc</div>
+    <nav>
+      <button class="active" data-tab="distorcao">Distorção</button>
+      <button data-tab="distorcao_pistas">Distorção Pistas</button>
+      <button data-tab="z_calculo">Z</button>
+      <button data-tab="lpc_lpi">LPC→LPI</button>
+      <button data-tab="lpi_lpc">LPI→LPC</button>
+      <button data-tab="angulos_cores">Ângulos</button>
+    </nav>
+  </header>
+  <main>
+    <div id="toast"></div>
+    <div class="calculator-container">
+      <!-- Distorção -->
+      <div id="distorcao" class="calculator">
+        <h2>Distorção <i class="fas fa-ruler-combined fa-lg"></i></h2>
+        <input list="hist_tamanho" type="number" id="tamanho_embalagem" placeholder="Tamanho Embalagem (mm)">
+        <datalist id="hist_tamanho"></datalist>
+        <input list="hist_fechamento" type="number" id="fechamento" placeholder="Fechamento (mm)">
+        <datalist id="hist_fechamento"></datalist>
+        <input list="hist_engrenagens" type="number" id="engrenagens" placeholder="Desenvolvimento (mm)">
+        <datalist id="hist_engrenagens"></datalist>
+        <button id="btn_calc_distorcao"><i class="fas fa-calculator"></i> Calcular</button>
+        <button id="btn_limpar_distorcao"><i class="fas fa-eraser"></i> Limpar</button>
+        <p id="resultado_distorcao" class="resultado"></p>
+        <div id="historico_distorcao" class="historico"></div>
+      </div>
+      <!-- Distorção Pistas -->
+      <div id="distorcao_pistas" class="calculator" style="display:none;">
+        <h2>Distorção Pistas <i class="fas fa-ruler-horizontal fa-lg"></i></h2>
+        <input list="hist_n_pistas" type="number" id="numero_pistas" placeholder="Número de Pistas">
+        <datalist id="hist_n_pistas"></datalist>
+        <input list="hist_distancia" type="number" id="distancia_pistas" placeholder="Distância entre Pistas (mm)">
+        <datalist id="hist_distancia"></datalist>
+        <button id="btn_calc_distorcao_pistas"><i class="fas fa-calculator"></i> Calcular</button>
+        <button id="btn_limpar_distorcao_pistas"><i class="fas fa-eraser"></i> Limpar</button>
+        <p id="resultado_distorcao_pistas" class="resultado"></p>
+        <div id="historico_distorcao_pistas" class="historico"></div>
+      </div>
+      <!-- Z -->
+      <div id="z_calculo" class="calculator" style="display:none;">
+        <h2>Cálculo de Z <i class="fas fa-circle-notch fa-lg"></i></h2>
+        <input list="hist_z" type="number" id="z_input" placeholder="Valor de Z">
+        <datalist id="hist_z"></datalist>
+        <button id="btn_z_1_8">1/8</button>
+        <button id="btn_z_1">1</button>
+        <button id="btn_limpar_z"><i class="fas fa-eraser"></i> Limpar</button>
+        <p id="resultado_z" class="resultado"></p>
+        <div id="historico_z" class="historico"></div>
+      </div>
+      <!-- LPC→LPI -->
+      <div id="lpc_lpi" class="calculator" style="display:none;">
+        <h2>LPC para LPI <i class="fas fa-exchange-alt fa-lg"></i></h2>
+        <input list="hist_lpc" type="number" id="lpc_input" placeholder="LPC">
+        <datalist id="hist_lpc"></datalist>
+        <button id="btn_calc_lpc_lpi"><i class="fas fa-calculator"></i> Calcular</button>
+        <button id="btn_limpar_lpc_lpi"><i class="fas fa-eraser"></i> Limpar</button>
+        <p id="resultado_lpi" class="resultado"></p>
+        <div id="historico_lpc_lpi" class="historico"></div>
+      </div>
+      <!-- LPI→LPC -->
+      <div id="lpi_lpc" class="calculator" style="display:none;">
+        <h2>LPI para LPC <i class="fas fa-exchange-alt fa-lg"></i></h2>
+        <input list="hist_lpi" type="number" id="lpi_input" placeholder="LPI">
+        <datalist id="hist_lpi"></datalist>
+        <button id="btn_calc_lpi_lpc"><i class="fas fa-calculator"></i> Calcular</button>
+        <button id="btn_limpar_lpi_lpc"><i class="fas fa-eraser"></i> Limpar</button>
+        <p id="resultado_lpc" class="resultado"></p>
+        <div id="historico_lpi_lpc" class="historico"></div>
+      </div>
+      <!-- Ângulos → Cores -->
+      <div id="angulos_cores" class="calculator" style="display:none;">
+        <h2>Ângulos das Cores <i class="fas fa-palette fa-lg"></i></h2>
+        <select id="angulos_select"><option value="">-- Selecione --</option><option value="automation">Automation CW</option><option value="kodak">Kodak NX</option><option value="flexo">Padrão Flexo</option></select>
+        <div id="angulos_resultado" class="resultado"></div>
+      </div>
+    </div>
+  </main>
+  <footer><span id="datahora"></span> | Desenvolvido por Fernando Oliveira</footer>
+  <script>
+    // Abas
+    document.querySelectorAll('nav button').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+        document.querySelectorAll('.calculator').forEach(c=>c.style.display='none');
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).style.display='block';
+      });
+    });
+    showToast = msg=>{const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2000);};
+    // Histórico + autocomplete
+    function salvaHist(id,val){if(!val)return;let arr=JSON.parse(localStorage.getItem(id)||'[]');if(!arr.includes(val)){arr.push(val);localStorage.setItem(id,JSON.stringify(arr));document.getElementById('hist_'+id).innerHTML=arr.map(v=>`<option value="${v}">`).join('');}}
+    function carregaHist(id){let arr=JSON.parse(localStorage.getItem(id)||'[]');document.getElementById('hist_'+id).innerHTML=arr.map(v=>`<option value="${v}">`).join('');}
+    ['tamanho','fechamento','engrenagens','n_pistas','distancia','z','lpc','lpi'].forEach(id=>carregaHist(id));
+    function flash(el,txt){el.textContent=txt;el.classList.add('resultado-flash');setTimeout(()=>el.classList.remove('resultado-flash'),400);}    
+    // Funções de cálculo
+    document.getElementById('btn_calc_distorcao').onclick=()=>{const t=+document.getElementById('tamanho_embalagem').value,f=+document.getElementById('fechamento').value,d=+document.getElementById('engrenagens').value;if(t&&f&&d){const r=((t*f)/d).toFixed(2)+' mm';flash(document.getElementById('resultado_distorcao'),'Res: '+r);salvaHist('tamanho',t);salvaHist('fechamento',f);salvaHist('engrenagens',d);document.getElementById('historico_distorcao').innerHTML+=r+'<br>';showToast('Cálculo realizado!');}};
+    document.getElementById('btn_limpar_distorcao').onclick=()=>{['tamanho_embalagem','fechamento','engrenagens'].forEach(i=>document.getElementById(i).value='');document.getElementById('resultado_distorcao').textContent='';};
+    document.getElementById('btn_calc_distorcao_pistas').onclick=()=>{const n=+document.getElementById('numero_pistas').value,dist=+document.getElementById('distancia_pistas').value;if(n&&dist){const r=(n*dist).toFixed(2)+' mm';flash(document.getElementById('resultado_distorcao_pistas'),'Res: '+r);salvaHist('n_pistas',n);salvaHist('distancia',dist);document.getElementById('historico_distorcao_pistas').innerHTML+=r+'<br>';showToast('Cálculo realizado!');}};
+    document.getElementById('btn_limpar_distorcao_pistas').onclick=()=>{['numero_pistas','distancia_pistas'].forEach(i=>document.getElementById(i).value='');document.getElementById('resultado_distorcao_pistas').textContent='';};
+    const calcZ=(m,lab)=>{const z=+document.getElementById('z_input').value;if(z){const r=(z*m).toFixed(2);flash(document.getElementById('resultado_z'),`Z modu ${lab}: ${r}`);salvaHist('z',z);document.getElementById('historico_z').innerHTML+=r+'<br>';showToast('Cálculo realizado!');}};
+    document.getElementById('btn_z_1_8').onclick=()=>calcZ(3.175,'1/8');
+    document.getElementById('btn_z_1').onclick=()=>calcZ(3.1415,'1');
+    document.getElementById('btn_limpar_z').onclick=()=>{document.getElementById('z_input').value='';document.getElementById('resultado_z').textContent='';};
+    document.getElementById('btn_calc_lpc_lpi').onclick=()=>{const l=+document.getElementById('lpc_input').value;if(l){const r=(l*2.54).toFixed(2);flash(document.getElementById('resultado_lpi'),r);salvaHist('lpc',l);document.getElementById('historico_lpc_lpi').innerHTML+=r+'<br>';showToast('Cálculo realizado!');}};
+    document.getElementById('btn_limpar_lpc_lpi').onclick=()=>{document.getElementById('lpc_input').value='';document.getElementById('resultado_lpi').textContent='';};
+    document.getElementById('btn_calc_lpi_lpc').onclick=()=>{const l=+document.getElementById('lpi_input').value;if(l){const r=(l/2.54).toFixed(2);flash(document.getElementById('resultado_lpc'),r);salvaHist('lpi',l);document.getElementById('historico_lpi_lpc').innerHTML+=r+'<br>';showToast('Cálculo realizado!');}};
+    document.getElementById('btn_limpar_lpi_lpc').onclick=()=>{document.getElementById('lpi_input').value='';document.getElementById('resultado_lpc').textContent='';};
+    document.getElementById('angulos_select').onchange=()=>{let html='';const v=document.getElementById('angulos_select').value;if(v==='automation')html=`<p>Cyan:22,5°</p><p>Magenta:52,5°</p><p>Yellow:7,5°</p><p>Black:82,5°</p>`;if(v==='kodak')html=`<p>Cyan:15°</p><p>Magenta:75°</p><p>Yellow:0°</p><p>Black:45°</p>`;if(v==='flexo')html=`<p>Cyan:67,5°</p><p>Magenta:37,5°</p><p>Yellow:82,5°</p><p>Black:7,5°</p>`;document.getElementById('angulos_resultado').innerHTML=html;showToast('Padrão selecionado!');};
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'){const f=document.activeElement; if(['INPUT','SELECT'].includes(f.tagName))f.value='';}});
+    setInterval(()=>document.getElementById('datahora').textContent=new Date().toLocaleString(),1000);
+    gsap.from('.calculator',{y:20,opacity:0,stagger:0.2,duration:0.6});
+  </script>
+</body>
+</html>

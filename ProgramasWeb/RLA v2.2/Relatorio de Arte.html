@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Gerenciador de Artes Supremo</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Mantém html2pdf -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body class="dark-mode">
+  <header id="mainHeader">Gerenciador de Artes Supremo</header>
+  
+  <div id="filtroWrapper">
+    <label for="filtroOperadorGlobal">Filtrar por Operador:&nbsp;</label>
+    <select id="filtroOperadorGlobal"><option value="">Todos</option></select>
+  </div>
+
+  <!-- Abas neon estilo navegador -->
+  <nav class="tab-container">
+    <button class="tab-button active" data-tab="briefing" onclick="mostrar('briefing')">Entrada 📝</button>
+    <button class="tab-button" data-tab="criacao" onclick="mostrar('criacao')">Criação 🎨</button>
+    <button class="tab-button" data-tab="analise" onclick="mostrar('analise')">Análise/Alteração 🔍</button>
+    <button class="tab-button" data-tab="alteracao" onclick="mostrar('alteracao')">Alteração Simples 🛠️</button>
+    <button class="tab-button" data-tab="aprovacao" onclick="mostrar('aprovacao')">Conferência ✅</button>
+    <button class="tab-button" data-tab="pendencia" onclick="mostrar('pendencia')">Pêndencia ❓</button>   
+    <button class="tab-button" data-tab="produzido" onclick="mostrar('produzido')">Saída 📦</button>
+  <!-- Nova aba Filtro -->
+    <button class="tab-button" data-tab="filtro" onclick="mostrar('filtro')">Filtro 🔎</button>   
+    <button class="tab-button" data-tab="dashboard" onclick="mostrar('dashboard')">Estatísticas 📊</button>
+    <button class="tab-button" data-tab="registros" onclick="mostrar('registros')">Backup 🗂️</button>
+  
+
+  </nav>
+
+  <main>
+    <section id="briefing" class="active">
+      <h2>Entrada 📝</h2>
+      <textarea id="descricao" placeholder="Descrição da arte"></textarea>
+      <input list="ops" id="operador" placeholder="Operador">
+      <input list="cls" id="cliente" placeholder="Cliente">
+      <datalist id="ops"></datalist>
+      <datalist id="cls"></datalist>
+      <button class="action" onclick="adicionar()">Adicionar</button>
+      <div id="listaBriefing"></div>
+      <div class="pagination" id="pagination-briefing"></div>
+    </section>
+
+    <section id="criacao">
+      <h2>Criação 🎨</h2>
+      <div id="listaCriacao"></div>
+      <div class="pagination" id="pagination-criacao"></div>
+    </section>
+
+    <section id="analise">
+      <h2>Análise 🔍</h2>
+      <div id="listaAnalise"></div>
+      <div class="pagination" id="pagination-analise"></div>
+    </section>
+
+    <section id="alteracao">
+      <h2>Alteração Simples 🛠️</h2>
+      <div id="listaAlteracao"></div>
+      <div class="pagination" id="pagination-alteracao"></div>
+    </section>
+
+    <section id="aprovacao">
+      <h2>Conferência ✅</h2>
+      <div id="listaAprovacao"></div>
+      <div class="pagination" id="pagination-aprovacao"></div>
+    </section>
+
+    <section id="pendencia">
+    <h2>Pêndencia ❓</h2>
+    <!-- os itens entram aqui -->
+    <div id="listaPendencia"></div>
+    <div class="pagination" id="pagination-pendencia"></div>
+    </section>
+
+
+    <section id="produzido">
+      <h2>Saída 📦</h2>
+      <select id="filtroOperadorPDF"></select>
+      <button class="action" onclick="gerarPDF()">Gerar PDF</button>
+      <div id="listaProduzido"></div>
+      <div class="pagination" id="pagination-produzido"></div>
+    </section>
+
+    <section id="registros">
+      <h2>Registros 🗂️</h2>
+      <div id="listaRegistros"></div>
+    </section>
+
+    <section id="dashboard">
+      <h2>Estatísticas 📊</h2>
+      <div id="estatisticas"></div>
+    </section>
+
+    <!-- Section da aba Filtro -->
+    <section id="filtro">
+      <h2>Filtro 🔎</h2>
+      <div class="filter-controls">
+        <label for="filtroCliente">Cliente:</label>
+        <select id="filtroCliente"><option value="">Todos</option></select>
+        <label for="filtroProduto">Produto:</label>
+        <select id="filtroProduto"><option value="">Todos</option></select>
+      </div>
+      <div id="listaFiltro"></div>
+      <div class="pagination" id="pagination-filtro"></div>
+    </section>
+  </main>
+  
+  <!-- Datalists para autocompletar -->
+<datalist id="historico_operador"></datalist>
+<datalist id="historico_cliente"></datalist>
+<datalist id="historico_descricao"></datalist>
+
+
+  <footer>
+    <button onclick="backup()">Backup</button>
+    <input type="file" onchange="restaurar(event)">
+  </footer>
+
+  <audio id="click-sound" src="click.mp3" preload="auto"></audio>
+  <script src="script.js"></script>
+</body>
+</html>

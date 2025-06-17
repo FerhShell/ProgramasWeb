@@ -1,0 +1,61 @@
+
+* { margin:0; padding:0; box-sizing:border-box; font-family:Arial,sans-serif }
+body {
+  background:#121212; color:#eee;
+  display:flex; flex-direction:column; align-items:center;
+  padding:20px;
+}
+h1 {
+  color:#00ffd0; margin-bottom:20px;
+  font-size: 36px;
+  animation: neonPisca 1.5s infinite alternate;
+  text-shadow:
+    0 0 5px #0ff,
+    0 0 10px #0ff,
+    0 0 20px #0ff,
+    0 0 40px #0ff;
+}
+@keyframes neonPisca {
+  0% {
+    text-shadow:
+      0 0 5px #0ff,
+      0 0 10px #0ff,
+      0 0 20px #0ff,
+      0 0 40px #0ff;
+  }
+  100% {
+    text-shadow:
+      0 0 2px #0ff,
+      0 0 4px #0ff,
+      0 0 8px #0ff,
+      0 0 16px #0ff;
+  }
+}
+label { color:#00ffd0; font-weight:bold; margin-bottom:5px; }
+input {
+  padding:8px; border:none; border-radius:5px;
+  background:#1f1f1f; color:#fff; margin-bottom:20px;
+}
+#dropZone {
+  width:90%; max-width:600px; height:120px;
+  border:2px dashed #00ffd0; border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  color:#00ffd0; margin-bottom:20px; cursor:pointer;
+  transition:background .3s;
+}
+#dropZone.dragover{ background:rgba(0,255,208,0.1) }
+table {
+  width:90%; max-width:700px; border-collapse:collapse;
+  margin-bottom:20px; display:table;
+}
+th,td {
+  padding:12px; text-align:center; border-bottom:1px solid #333;
+}
+th { background:#00ffd0; color:#000 }
+tbody tr:hover{ background:rgba(0,255,208,0.1) }
+button {
+  padding:10px 20px; border:none; border-radius:5px;
+  background:#ff4081; color:#fff; cursor:pointer;
+  font-weight:bold;
+}
+button:hover{ background:#e73370 }
