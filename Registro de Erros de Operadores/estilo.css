@@ -1,0 +1,485 @@
+/* ======================================
+   Estilos principais | Fundo animado
+   ====================================== */
+
+/* Define fonte global e prepara o fundo animado */
+body {
+  /* Define a fonte principal como Roboto, sem serifa, escolha clássica para legibilidade */
+  font-family: 'Roboto', sans-serif;
+  /* Aplicação de gradiente animado que vai do preto ao cinza e volta ao preto */
+  background: linear-gradient(180deg, #000000 0%, #4a4a4a 50%, #000000 100%);
+  /* Aumenta a área do gradiente para permitir movimento suave */
+  background-size: 400% 400%;
+  /* Aplica animação chamada gradientMove, durando 20 segundos, repetição infinita */
+  animation: gradientMove 1s ease infinite;
+  /* Define cor do texto como cinza claro, contraste necessário no fundo escuro */
+  color: #f5f5f5;
+  /* Remove margem padrão do corpo, padronizando como era feito nos velhos tempos */
+  margin: 0;
+  /* Remove padding padrão do corpo, para controle total do layout */
+  padding: 0;
+}
+
+/* Define os passos da animação que move o fundo */
+@keyframes gradientMove {
+  /* Início: posição horizontal do fundo em 0%, vertical em 50% */
+  0%   { background-position: 0% 50%; }
+  /* Meio: gradiente deslocado para 100% horizontal, mantendo vertical em 50% */
+  50%  { background-position: 100% 50%; }
+  /* Fim: retorna ao ponto inicial, garantindo loop contínuo */
+  100% { background-position: 0% 50%; }
+}
+
+/* Container principal ajustado no centro da página */
+.container {
+  /* Define posição relativa para possíveis elementos posicionados dentro */
+  position: relative;
+  /* Largura máxima de 900px, controlando a expansão em telas grandes */
+  max-width: 900px;
+  /* Centro horizontal com margem automática e um pouco de margem vertical para separar do topo */
+  margin: 20px auto;
+  /* Espaçamento interno de 20px, mantendo layout arejado */
+  padding: 20px;
+  /* Cantos arredondados de 12px, tradicional para suavizar o visual */
+  border-radius: 12px;
+  /* Sombra suave para destacar o container, técnica antiga de dar profundidade */
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  /* Mantém o container um pouco mais claro que o fundo para ressaltá-lo */
+  background: linear-gradient(145deg, #2e2e2e, #212121);
+}
+
+/* Estiliza o título principal centralizado e com cor vibrante */
+h1 {
+  /* Centraliza o texto, prática clássica para títulos */
+  text-align: center;
+  /* Cor azul-ciano para destacar sobre o fundo escuro */
+  color: #00bcd4;
+  /* Margem inferior para separar do conteúdo seguinte */
+  margin-bottom: 20px;
+}
+
+/* ====== Formulário ====== */
+
+/* Exibe o formulário em coluna, com espaçamento entre itens */
+form {
+  /* Usa flexbox para organizar campos verticalmente */
+  display: flex;
+  /* Define direção de itens em coluna, prática tradicional para formulários */
+  flex-direction: column;
+  /* Espaçamento de 15px entre cada campo, garantindo clareza */
+  gap: 15px;
+}
+
+/* Estilo dos rótulos dos campos, cor clara para contraste */
+label {
+  /* Cor cinza-clara para não competir demais com o fundo animado */
+  color: #cfd8dc;
+}
+
+/* Aplica estilos a todos os inputs, textarea e botões de forma genérica */
+input,
+textarea,
+button {
+  /* Espaçamento interno de 10px, deixando elementos clicáveis confortáveis */
+  padding: 10px;
+  /* Remove bordas padrão para estilo mais clean */
+  border: none;
+  /* Cantos arredondados de 8px, padrão tradicional para suavizar */
+  border-radius: 8px;
+  /* Fundo escuro sólido para campos e botões, seguindo o tema futurista */
+  background-color: #333;
+  /* Texto branco para contraste legível nos elementos escuros */
+  color: #fff;
+  /* Adiciona leve sombra interna para dar profundidade */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Ajustes específicos para botões: cursor e transições suaves */
+button {
+  /* Cursor de ponteiro para indicar que botão é clicável, costume antigo de usabilidade */
+  cursor: pointer;
+  /* Tamanho de fonte de 16px, legível e tradicional para botões */
+  font-size: 16px;
+  /* Transições para hover: leve escala e mudança de cor, prática consolidada */
+  transition: transform 0.2s ease, background-color 0.3s, box-shadow 0.3s;
+}
+
+/* Efeito de hover nos botões: escala ligeira, cor de fundo mais clara e sombra mais pronunciada */
+button:hover {
+  /* Aumenta ligeiramente o botão para feedback visual */
+  transform: scale(1.03);
+  /* Muda fundo para tom de cinza mais claro, prática de hover suave */
+  background-color: #444;
+  /* Sombra maior para reforçar a sensação de elevação */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* ====== Info-box (botões extras) ====== */
+
+/* Agrupa botões auxiliares em uma caixa flexível com espaçamento */
+.info-box {
+  /* Flexbox para dispor botões lado a lado */
+  display: flex;
+  /* Espaço de 10px entre cada botão */
+  gap: 10px;
+  /* Permite quebra de linha quando não couber tudo em uma linha, característica de design responsivo */
+  flex-wrap: wrap;
+  /* Margem superior para separar do formulário */
+  margin-top: 20px;
+}
+
+/* Estilo genérico para botões com ícone, cor vibrante e formato amigável */
+.btn-icon {
+  /* Flexbox para alinhar ícone e texto horizontalmente */
+  display: flex;
+  /* Centraliza verticalmente ícone e texto */
+  align-items: center;
+  /* Espaço de 6px entre ícone e texto, mantendo clareza */
+  gap: 6px;
+  /* Fundo azul-ciano para botões, destaca sobre o fundo escuro */
+  background-color: #00bcd4;
+  /* Texto branco para contraste legível */
+  color: #fff;
+  /* Cantos arredondados de 6px, padrão tradicional para botões */
+  border-radius: 6px;
+  /* Espaçamento interno de 8px vertical e 12px horizontal */
+  padding: 8px 12px;
+  /* Transição suave para mudança de cor de fundo e escala no hover */
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+/* Hover para botões com ícone: cor azul-escuro e leve escala */
+.btn-icon:hover {
+  /* Muda cor de fundo para tom mais escuro de ciano */
+  background-color: #0097a7;
+  /* Aumenta ligeiramente o botão para feedback visual */
+  transform: scale(1.03);
+}
+
+/* Estilo dos ícones SVG dentro de botões: tamanho fixo e traçado branco */
+.btn-icon .icon {
+  /* Largura fixa de 18px para ícones, proporção tradicional para botões */
+  width: 18px;
+  /* Altura fixa de 18px para ícones, mesmo valor da largura */
+  height: 18px;
+  /* Remove preenchimento interno do SVG, preferindo traçado */
+  fill: none;
+  /* Cor do traçado segue a cor atual do texto do botão (white) */
+  stroke: currentColor;
+}
+
+/* Botão que alterna visibilidade de dropdown: posição relativa para a seta */
+.btn-toggle {
+  /* Define posição relativa para permitir posicionar pseudo-elemento (seta) */
+  position: relative;
+}
+
+/* Cria a seta apontando para baixo após o texto do botão */
+.btn-toggle::after {
+  /* Conteúdo vazio, mas utilizado para desenhar a seta via bordas */
+  content: "";
+  /* Exibe elemento inline-block para poder ajustar tamanho */
+  display: inline-block;
+  /* Espaço à esquerda do texto para separar a seta */
+  margin-left: 8px;
+  /* Define bordas para criar a seta usando as bordas bottom e right */
+  border: solid #fff;
+  /* Espessura das bordas: 0 top, 2px right, 2px bottom, 0 left */
+  border-width: 0 2px 2px 0;
+  /* Espaçamento interno de 4px para ajustar o tamanho visual da seta */
+  padding: 4px;
+  /* Rotaciona 45 graus para obter seta apontando para baixo */
+  transform: rotate(45deg);
+  /* Transição suave de rotação para quando o botão é aberto */
+  transition: transform 0.3s;
+}
+
+/* Quando o botão de toggle está “open”, vira a seta para cima */
+.btn-toggle.open::after {
+  /* Rotaciona -135 graus, tornando a seta apontada para cima */
+  transform: rotate(-135deg);
+}
+
+/* ====== Lista de operadores ====== */
+
+/* Estiliza a lista de operadores oculta inicialmente, fundo escuro e sombra leve */
+#operatorList {
+  /* Não exibe por padrão: lista só aparece quando clicado no botão */
+  display: none;
+  /* Fundo escuro #2a2a2a para a lista suspensa, seguindo o tema */
+  background: #2a2a2a;
+  /* Espaçamento interno de 10px para itens confortáveis */
+  padding: 10px;
+  /* Cantos arredondados de 8px, coerente com outros elementos */
+  border-radius: 8px;
+  /* Sombra leve para dar sensação de camada acima do resto */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  /* Posição absoluta para sobrepor ao botão e demais elementos */
+  position: absolute;
+  /* Alto valor de z-index para garantir que fique acima de tudo */
+  z-index: 11;
+}
+
+/* ================================
+   Relatório detalhado (dropdown geral)
+   ================================ */
+
+/* Espaçamento superior para separar a seção de relatório de tudo que vem antes */
+.report-section {
+  /* Apenas adiciona margem superior de 30px */
+  margin-top: 30px;
+}
+
+/* ====== Dropdown de erros detalhado geral ====== */
+
+/* Inicialmente, o dropdown fica fechado (altura zero e invisível) */
+.erros-dropdown {
+  /* Margem inferior para espaçar do gráfico ou outros elementos */
+  margin-bottom: 20px;
+  /* Oculta o conteúdo que exceder a altura definida */
+  overflow: hidden;
+  /* Altura máxima zero, escondendo todo conteúdo */
+  max-height: 0;
+  /* Torna completamente transparente para não aparecer antes de abrir */
+  opacity: 0;
+  /* Transições de altura e opacidade para abertura suave */
+  transition: max-height 0.6s ease, opacity 0.6s ease;
+}
+
+/* Estado “open” do dropdown: altura generosa e opacidade total */
+.erros-dropdown.open {
+  /* Altura máxima alta o suficiente para mostrar todo o conteúdo */
+  max-height: 2000px;
+  /* Torna totalmente opaco para ser visível */
+  opacity: 1;
+}
+
+/* Bloco que agrupa cada operador dentro do dropdown de erros */
+.operador-erros {
+  /* Fundo escuro #2a2a2a, criando contraste com o contêiner pai */
+  background: #2a2a2a;
+  /* Margem inferior de 10px para separar cada grupo */
+  margin-bottom: 10px;
+  /* Cantos arredondados de 8px, coerente com todo o design */
+  border-radius: 8px;
+  /* Esconde conteúdo que sair do bloco, preparando animação interna */
+  overflow: hidden;
+  /* Sombra leve para destacar cada grupo individual de erros */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo do título (h3) de cada operador dentro do dropdown */
+.operador-erros h3 {
+  /* Remove margens padrão, controle manual do espaçamento */
+  margin: 0;
+  /* Espaçamento interno horizontal de 15px e vertical de 10px para área clicável generosa */
+  padding: 10px 15px;
+  /* Fundo cinza escuro #333, consistente com botões e inputs */
+  background: #333;
+  /* Texto branco para contraste */
+  color: #fff;
+  /* Tamanho de fonte 17px, legível e não exagerado */
+  font-size: 17px;
+  /* Cursor de ponteiro para indicar que o cabeçalho é clicável */
+  cursor: pointer;
+  /* Transição de cor de fundo para hover suave */
+  transition: background-color 0.3s;
+  /* Posição relativa para permitir posicionar a seta pseudo-elemento */
+  position: relative;
+}
+
+/* Cria a seta ao lado do título do operador usando pseudo-elemento */
+.operador-erros h3::after {
+  /* Conteúdo vazio, mas usado para desenhar a seta */
+  content: "";
+  /* Posição absoluta para alinhamento correto dentro do h3 */
+  position: absolute;
+  /* 15px da borda direita para afastar a seta do texto */
+  right: 15px;
+  /* Centraliza verticalmente em relação ao h3 */
+  top: 50%;
+  /* Ajusta para centralizar exatamente no meio */
+  transform: translateY(-50%) rotate(45deg);
+  /* Borda branca para formar a seta */
+  border: solid #fff;
+  /* Espessura de borda: 0 top, 2px right, 2px bottom, 0 left */
+  border-width: 0 2px 2px 0;
+  /* Espaço interno de 4px para definir o tamanho visual da seta */
+  padding: 4px;
+  /* Transição suave para rotação quando expandir o conteúdo */
+  transition: transform 0.3s;
+}
+
+/* Gira a seta para cima quando o h3 tem classe “open” */
+.operador-erros h3.open::after {
+  /* Gira -135 graus para seta apontar para cima, indicando conteúdo aberto */
+  transform: translateY(-50%) rotate(-135deg);
+}
+
+/* Hover sobre o cabeçalho do operador: muda fundo para cinza mais claro */
+.operador-erros h3:hover {
+  /* Fundo #444 para feedback visual ao passar mouse */
+  background-color: #444;
+}
+
+/* ====== Lista de erros de cada operador ====== */
+
+/* Inicialmente oculta, transição similar ao dropdown geral */
+.erros-lista {
+  /* Altura máxima zero para esconder todos os itens */
+  max-height: 0;
+  /* Oculta conteúdo excedente */
+  overflow: hidden;
+  /* Transições de altura e opacidade para abertura suave */
+  transition: max-height 0.6s ease, opacity 0.6s ease;
+  /* Torna transparente para ficar invisível antes de abrir */
+  opacity: 0;
+}
+
+/* Estado “open” da lista de erros: altura suficiente e visível */
+.erros-lista.open {
+  /* Altura máxima alta o suficiente para conter todos os itens */
+  max-height: 1000px;
+  /* Opacidade total para aparecer */
+  opacity: 1;
+}
+
+/* Estilo da lista não ordenada dentro de .erros-lista */
+.erros-lista ul {
+  /* Remove marcadores padrões da lista */
+  list-style: none;
+  /* Remove margem padrão da lista */
+  margin: 0;
+  /* Adiciona padding interno para separar itens das bordas */
+  padding: 10px 15px;
+}
+
+/* Estilo de cada item da lista de erros */
+.erros-lista li {
+  /* Fundo cinza escuro #333 para destacar cada item */
+  background: #333;
+  /* Margem inferior de 10px para espaçar itens */
+  margin-bottom: 10px;
+  /* Espaçamento interno de 12px para conforto visual */
+  padding: 12px;
+  /* Cantos arredondados de 6px, padrão visual suave */
+  border-radius: 6px;
+  /* Cor do texto como cinza claro para contraste */
+  color: #f5f5f5;
+  /* Altura de linha de 1.3 para melhor leitura do texto */
+  line-height: 1.3;
+  /* Usa flexbox para alinhar texto e botão de remover lado a lado */
+  display: flex;
+  /* Espaçam texto e botão igualmente, alinhando no início */
+  justify-content: space-between;
+  /* Alinha itens no topo do container (botão aparece alinhado ao topo do texto) */
+  align-items: flex-start;
+  /* Sombra sutil para dar sensação de elevação do item */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  /* Transições para background e posição ao hover */
+  transition: background 0.3s, transform 0.2s;
+}
+
+/* Hover em cada item de erro: muda cor de fundo e eleva levemente */
+.erros-lista li:hover {
+  /* Cor de fundo um pouco mais clara (#3d3d3d) para indicar foco */
+  background: #3d3d3d;
+  /* Move o item 2px para cima, dando efeito de “flutuar” */
+  transform: translateY(-2px);
+}
+
+/* Estilo para o botão de remover dentro de cada li */
+.erros-lista li button {
+  /* Cor de fundo vermelha forte para indicar ação destrutiva */
+  background-color: #e53935;
+  /* Remove borda padrão do botão */
+  border: none;
+  /* Cantos arredondados de 4px, padrão leve para botões menores */
+  border-radius: 4px;
+  /* Texto branco para contraste */
+  color: #fff;
+  /* Padding de 4px vertical e 8px horizontal para área de clique confortável */
+  padding: 4px 8px;
+  /* Tamanho de fonte de 12px, adequado para botão discreto */
+  font-size: 12px;
+  /* Cursor de ponteiro para indicar que é clicável */
+  cursor: pointer;
+  /* Transição suave de cor de fundo ao hover */
+  transition: background-color 0.2s;
+}
+
+/* Hover no botão de remover: cor vermelha escura para indicação de ação iminente */
+.erros-lista li button:hover {
+  /* Muda fundo para #b71c1c para feedback visual */
+  background-color: #b71c1c;
+}
+
+/* ====== Gráfico ====== */
+
+/* Container do gráfico: margem superior e definição de tamanho */
+.chart-container {
+  /* Espaço acima para separar do relatório */
+  margin-top: 20px;
+  /* Posição relativa para lidar com canvas internamente */
+  position: relative;
+  /* Largura total do container, para responsividade */
+  width: 100%;
+  /* Altura fixa de 400px para exibição adequada do gráfico */
+  height: 400px;
+}
+
+/* Força o canvas a ocupar todo o espaço do container */
+.chart-container canvas {
+  /* Define largura do canvas como 100% do container, usando !important para sobrepor valores inline */
+  width: 100% !important;
+  /* Define altura do canvas como 100% do container, garantindo proporção correta */
+  height: 100% !important;
+}
+
+/* ====== Zona de Drop XML ====== */
+
+/* Zona fixa no canto superior direito para arrastar arquivo XML */
+#xmlDropZone {
+  /* Posição absoluta para aparecer em relação ao container ou body */
+  position: absolute;
+  /* Distância de 20px do topo para não colidir com borda da janela */
+  top: 20px;
+  /* Distância de 20px da direita para manter no canto */
+  right: 20px;
+  /* Largura fixa de 150px, definindo área de arrasto */
+  width: 150px;
+  /* Altura fixa de 100px, suficiente para interação de drag & drop */
+  height: 100px;
+  /* Borda tracejada azul-ciano para indicar área interativa */
+  border: 2px dashed #00bcd4;
+  /* Cantos arredondados de 8px, suavizando o retângulo */
+  border-radius: 8px;
+  /* Exibe conteúdo flexível para centralizar texto */
+  display: flex;
+  /* Alinha itens verticalmente no centro */
+  align-items: center;
+  /* Alinha itens horizontalmente no centro */
+  justify-content: center;
+  /* Cor do texto dentro da zona, azul-ciano para consistência com borda */
+  color: #00bcd4;
+  /* Tamanho de fonte de 14px, legível dentro da área pequena */
+  font-size: 14px;
+  /* Centraliza o texto em múltiplas linhas, caso necessário */
+  text-align: center;
+  /* Fundo semitransparente preto para destacar sem bloquear o gradiente */
+  background: rgba(0, 0, 0, 0.3);
+  /* Transição suave de fundo quando estiver arrastando */
+  transition: background 0.2s;
+  /* Z-index 10 para ficar acima de vários elementos, mas abaixo do operatorList (z-index 11) */
+  z-index: 10;
+}
+
+/* Estado ao arrastar arquivo sobre a zona: muda fundo para indicar prontidão */
+#xmlDropZone.dragover {
+  /* Fundo azul claro semitransparente ao arrastar arquivo válido */
+  background: rgba(0, 188, 212, 0.2);
+}
+
+/* ====== PDF Clean ====== */
+
+/* O jsPDF desenha direto no arquivo, então não depende de estilos CSS adicionais */
