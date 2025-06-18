@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let errors = [];
   let errorChart = null;
 
-  const API_URL = "https://script.google.com/macros/s/AKfycbzL0sZ2UuVRa_CR-u3apVbF4j2oy1kXf_k2XX4vMTPRCf-qg-rowuzq3-6C_9mZ20JRUg/exec";
+  const API_URL = "https://script.google.com/macros/s/AKfycbyQnsSEagrxy8WvuYQUT87SpBhIIDDKrLZ2bfqULHTxu3bu7W-C-e0eIyopputyMQ8/exec";
 
   // Carregar dados da planilha
   async function carregarDados() {
