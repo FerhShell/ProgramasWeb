@@ -1,123 +1,116 @@
-<!DOCTYPE html> <!-- Declaração de documento HTML5, como sempre se fez para garantir compatibilidade -->
-<html lang="pt-BR"> <!-- Tag raiz indicando que o idioma do conteúdo é português do Brasil -->
-<head> <!-- Início da seção de metadados e importações, seguindo o jeito clássico de estruturar a cabeça do documento -->
-  <meta charset="UTF-8"> <!-- Define codificação de caracteres UTF-8, padrão que sempre usamos para suportar acentuação -->
-  <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- Ajusta layout para dispositivos móveis, coisa que já fazia sentido desde o início do design responsivo -->
-  <title>Registro de Erros de Operadores</title> <!-- Título que aparece na aba do navegador, como era de costume escolher logo no começo -->
-  <!-- Chama o CSS externo -->
-  <link rel="stylesheet" href="estilo.css"> <!-- Importa a folha de estilo externa, prática tradicional para separar estrutura e aparência -->
-  <!-- Chart.js e plugin de datalabels -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Biblioteca Chart.js para gerar gráficos, método consolidado de puxar do CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script> <!-- Plugin de datalabels para mostrar valores nos gráficos, seguindo a forma tradicional de estender funcionalidades -->
-</head> <!-- Fecha a seção head, sempre foi assim: metadados primeiro, depois o corpo -->
-<body> <!-- Início do corpo da página, onde todo o conteúdo visível vai ficar -->
-  <div class="container"> <!-- Contêiner principal para agrupar toda a interface, costume de organização clássica -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Registro de Erros de Operadores</title>
+  <link rel="stylesheet" href="estilo.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Registro de Erros de Operadores</h1>
 
-    <h1>Registro de Erros de Operadores</h1> <!-- Título principal visível, prática tradicional de colocar o título logo no topo -->
+    <!-- Zona de arrastar XML (estética por enquanto) -->
+    <div id="xmlDropZone">Arraste o XML aqui</div>
 
-    <!-- Zona de arrastar XML -->
-    <div id="xmlDropZone">Arraste o XML aqui</div> <!-- Área dedicada para drag & drop do XML, ideia que nasceu para facilitar a vida sem complicação -->
+    <!-- Formulário para enviar direto ao Google Sheets -->
+    <form action="https://script.google.com/macros/s/SEU_ID_DO_SCRIPT/exec" method="POST" target="hiddenFrame">
+      <label for="client">Cliente:</label>
+      <input type="text" id="client" name="client" required>
 
-    <!-- Formulário de cadastro de erro -->
-    <form id="errorForm"> <!-- Inicia o formulário que vai capturar os dados do erro, uso de form padrão HTML sem frescura -->
-      <label for="client">Cliente:</label> <!-- Rótulo para o campo do cliente, sempre foi assim para acessibilidade -->
-      <input type="text" id="client" name="client" required> <!-- Campo de texto para nome do cliente, obrigatório para não deixar vazio -->
+      <label for="operator">Operador:</label>
+      <input type="text" id="operator" name="operator" required>
 
-      <label for="operatorButton">Operador:</label> <!-- Rótulo para selecionar o operador, porque tradicionalmente a gente indica antes o campo -->
-      <button type="button" id="operatorButton">Selecione um Operador</button> <!-- Botão que abre lista de operadores, técnica clássica de usar button ao invés de select para customização -->
-      <div id="operatorList"></div> <!-- Div onde a lista de operadores será renderizada, prática de dinamizar conteúdo sem complicação -->
+      <label for="orderNumber">Número da OS:</label>
+      <input type="text" id="orderNumber" name="orderNumber" required>
 
-      <label for="orderNumber">Número da OS:</label> <!-- Rótulo para campo de número da Ordem de Serviço (OS), sempre importante identificar antes -->
-      <input type="text" id="orderNumber" name="orderNumber" required> <!-- Campo de texto para número da OS, obrigatório para manter consistência dos registros -->
+      <label for="description">Descrição do Erro:</label>
+      <textarea id="description" name="description" rows="4" required></textarea>
 
-      <label for="errorDescription">Descrição do Erro:</label> <!-- Rótulo para área de descrição do erro, do jeito que a gente sempre fez para indicar propósito -->
-      <textarea id="errorDescription" name="errorDescription" rows="4" required></textarea> <!-- Área de texto para descrever o erro, obrigatória para capturar detalhes -->
+      <!-- Campo oculto para enviar a data automática -->
+      <input type="hidden" name="date" id="currentDate">
 
-      <button type="submit" class="btn-submit">Registrar Erro</button> <!-- Botão de submissão do formulário, padrão tradicional de enviar dados -->
-    </form> <!-- Fim do formulário de cadastro de erro -->
+      <button type="submit" class="btn-submit">Registrar Erro</button>
+    </form>
 
     <!-- Botões auxiliares -->
-    <div class="info-box"> <!-- Caixa de informações e botões extras, estratégia conservadora de agrupar funções secundárias -->
-      <button id="addOperator" class="btn-icon"> <!-- Botão para adicionar novo operador, prática tradicional de usar ícone junto do texto -->
-        <!-- Ícone de “+” -->
+    <div class="info-box">
+      <button id="addOperator" class="btn-icon">
         <svg class="icon icon-plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
           <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line>
           <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line>
-        </svg> <!-- SVG de ícone, técnica que a gente sempre usou para leveza e simplicidade -->
+        </svg>
         Adicionar Operador
-      </button> <!-- Fim do botão “Adicionar Operador” -->
+      </button>
 
-      <button id="removeOperator" class="btn-icon"> <!-- Botão para remover operador selecionado, seguindo a forma tradicional de confirmação visual -->
-        <!-- Ícone de lixeira -->
+      <button id="removeOperator" class="btn-icon">
         <svg class="icon icon-trash" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
           <path d="M3 6h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
           <path d="M8 6v14m8-14v14" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
           <path d="M5 6l1-2h12l1 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-        </svg> <!-- SVG de ícone de lixeira, prática tradicional de ícones vetoriais -->
+        </svg>
         Remover Operador
-      </button> <!-- Fim do botão “Remover Operador” -->
+      </button>
 
-      <button id="exportBackup" class="btn-icon"> <!-- Botão para exportar backup dos dados, costume de dar opção de salvar externamente -->
-        <!-- Ícone de exportar (seta para cima) -->
+      <button id="exportBackup" class="btn-icon">
         <svg class="icon icon-download" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
           <path d="M12 19v-14m-5 5l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
           <path d="M5 19h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-        </svg> <!-- SVG de ícone, detalhe que desde sempre facilitou entender a ação -->
+        </svg>
         Exportar Backup
-      </button> <!-- Fim do botão “Exportar Backup” -->
+      </button>
 
-      <button id="importBackup" class="btn-icon"> <!-- Botão para importar backup, repetindo a tradição de permitir restauração de dados -->
-        <!-- Ícone de importar (seta para baixo) -->
+      <button id="importBackup" class="btn-icon">
         <svg class="icon icon-upload" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
           <path d="M12 5v14m-5-5l5-5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
           <path d="M5 5h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-        </svg> <!-- SVG de ícone, uso tradicional de setas para representar importação -->
+        </svg>
         Importar Backup
-      </button> <!-- Fim do botão “Importar Backup” -->
+      </button>
 
-      <input type="file" id="importFile" accept="application/json" style="display:none;"> <!-- Input oculto para selecionar arquivo JSON de backup, prática clássica de esconder o input real -->
-      
-      <button id="clearAll" class="btn-icon"> <!-- Botão para limpar todos os registros, sempre bom ter essa opção de “reset” -->
-        <!-- Ícone de limpar (vassoura ou escova) -->
+      <input type="file" id="importFile" accept="application/json" style="display:none;">
+
+      <button id="clearAll" class="btn-icon">
         <svg class="icon icon-clear" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
           <path d="M3 3l18 18M21 3L3 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-        </svg> <!-- SVG de ícone, visualizando a ação de limpar -->
+        </svg>
         Limpar Tudo
-      </button> <!-- Fim do botão “Limpar Tudo” -->
+      </button>
 
-      <button id="generatePDF" class="btn-icon"> <!-- Botão para gerar PDF com relatório de erros, abordagem consolidada de usar jsPDF -->
-        <!-- Ícone de PDF -->
+      <button id="generatePDF" class="btn-icon">
         <svg class="icon icon-pdf" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
           <path d="M6 2h9l6 6v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
           <path d="M15 2v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
           <text x="8" y="17" font-size="8" fill="currentColor">PDF</text>
-        </svg> <!-- SVG de ícone, reforçando a escolha de gerar PDF no front-end -->
+        </svg>
         Gerar PDF
-      </button> <!-- Fim do botão “Gerar PDF” -->
+      </button>
 
-      <button id="toggleErrosBtn" class="btn-icon btn-toggle"> <!-- Botão para mostrar/ocultar relatório de erros detalhado, costume de dar visibilidade opcional -->
-        <!-- Texto + pseudo-ícone via CSS -->
+      <button id="toggleErrosBtn" class="btn-icon btn-toggle">
         Ver Relatórios de Erros
-      </button> <!-- Fim do botão “Ver/ocultar Relatórios de Erros” -->
-    </div> <!-- Fim da div .info-box, agrupamento de botões auxiliares conforme padrão tradicional -->
+      </button>
+    </div>
 
-    <!-- Relatório detalhado (sem boxes) + gráfico -->
-    <div id="report" class="report-section" style="display:none;"> <!-- Seção de relatório oculta inicialmente, para mostrar quando o usuário quiser -->
-      <!-- Container colapsável para lista de erros detalhada geral -->
-      <div id="errosDropdown" class="erros-dropdown"></div> <!-- Div que vai receber a lista de erros detalhada, combinando tradição de listas aninhadas -->
+    <!-- Relatórios e gráfico -->
+    <div id="report" class="report-section" style="display:none;">
+      <div id="errosDropdown" class="erros-dropdown"></div>
+      <div class="chart-container">
+        <canvas id="errorChart"></canvas>
+      </div>
+    </div>
+  </div>
 
-      <!-- Gráfico de barras -->
-      <div class="chart-container"> <!-- Container específico para o canvas do gráfico, layout clássico para dimensionar o gráfico -->
-        <canvas id="errorChart"></canvas> <!-- Canvas onde o Chart.js vai desenhar o gráfico de barras, técnica consagrada de usar canvas -->
-      </div> <!-- Fim da div .chart-container -->
-    </div> <!-- Fim da div #report -->
+  <!-- Iframe escondido para evitar redirecionamento após envio -->
+  <iframe name="hiddenFrame" style="display:none;"></iframe>
 
-  </div> <!-- Fim da div .container, encerrando todo o conteúdo principal -->
-
-  <!-- Bibliotecas adicionais (html2canvas, jsPDF) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script> <!-- Importa html2canvas para capturar parte da página como imagem, prática comum para avançar no PDF -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> <!-- Importa jsPDF para gerar e salvar PDF, abordagem tradicional de PDF no front-end -->
-  <!-- Script JS externo -->
-  <script src="script.js"></script> <!-- Importa o arquivo JavaScript principal, seguindo a convenção de separar lógica em .js -->
-</body> <!-- Fim do corpo do documento -->
-</html> <!-- Fim do documento HTML -->
+  <!-- Scripts adicionais -->
+  <script>
+    // Insere a data atual automaticamente no campo oculto
+    document.getElementById('currentDate').value = new Date().toLocaleString();
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</body>
+</html>
