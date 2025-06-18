@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // === Referência aos elementos ===
   const form = document.getElementById('errorForm');
   const operatorList = document.getElementById('operatorList');
   const operatorButton = document.getElementById('operatorButton');
@@ -6,14 +7,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const errosDropdown = document.getElementById('errosDropdown');
   const chartCtx = document.getElementById('errorChart').getContext('2d');
 
+  // === Variáveis de estado ===
   let selectedOperator = null;
   let operators = [];
   let errors = [];
   let errorChart = null;
 
+  // === Link da API do Google Apps Script ===
   const API_URL = "https://script.google.com/macros/s/AKfycbyQnsSEagrxy8WvuYQUT87SpBhIIDDKrLZ2bfqULHTxu3bu7W-C-e0eIyopputyMQ8/exec";
 
-  // Carregar dados da planilha
+  // === Carregar dados da planilha ===
   async function carregarDados() {
     const res = await fetch(API_URL);
     const dados = await res.json();
@@ -24,11 +27,13 @@ document.addEventListener('DOMContentLoaded', () => {
     generateChart();
   }
 
+  // === Renderizar lista de operadores ===
   function renderOperators() {
     operators.sort((a, b) => a.localeCompare(b, 'pt-BR'));
     operatorList.innerHTML = operators.map(op =>
       `<label><input type="radio" name="operator" value="${op}" ${selectedOperator === op ? 'checked' : ''}> ${op}</label>`
     ).join('');
+
     document.querySelectorAll('input[name="operator"]').forEach(i => {
       i.onchange = () => {
         selectedOperator = i.value;
@@ -38,37 +43,54 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // === Alternar visibilidade da lista de operadores ===
   operatorButton.addEventListener('click', () => {
     operatorList.style.display = operatorList.style.display === 'block' ? 'none' : 'block';
   });
 
+  // === Alternar visibilidade do dropdown de erros ===
   toggleErrosBtn.addEventListener('click', () => {
     errosDropdown.classList.toggle('open');
     toggleErrosBtn.classList.toggle('open');
     toggleErrosBtn.textContent = errosDropdown.classList.contains('open') ? 'Ocultar Relatórios de Erros' : 'Ver Relatórios de Erros';
   });
 
+  // === Enviar novo erro para a planilha ===
   form.addEventListener('submit', async e => {
     e.preventDefault();
     if (!selectedOperator) return alert('Selecione um operador!');
+
+    // Coletar dados do formulário
     const client = document.getElementById('client').value;
     const orderNumber = document.getElementById('orderNumber').value;
     const description = document.getElementById('errorDescription').value;
     const date = new Date().toLocaleString('pt-BR');
 
-    const novoErro = { date, client, operator: selectedOperator, orderNumber, description };
-    await fetch(API_URL, {
-      method: "POST",
-      body: JSON.stringify(novoErro),
-      headers: { "Content-Type": "application/json" }
-    });
+    // Montar como formulário tradicional (form-urlencoded)
+    const formData = new URLSearchParams();
+    formData.append('date', date);
+    formData.append('client', client);
+    formData.append('operator', selectedOperator);
+    formData.append('orderNumber', orderNumber);
+    formData.append('description', description);
 
-    form.reset();
-    selectedOperator = null;
-    operatorButton.textContent = 'Selecione um Operador';
-    await carregarDados();
+    try {
+      await fetch(API_URL, {
+        method: "POST",
+        body: formData
+      });
+
+      alert("Erro registrado com sucesso!");
+      form.reset();
+      selectedOperator = null;
+      operatorButton.textContent = 'Selecione um Operador';
+      await carregarDados();
+    } catch (err) {
+      alert("Falha ao enviar erro. Verifique sua conexão.");
+    }
   });
 
+  // === Agrupar erros por operador ===
   function groupByOperator() {
     return errors.reduce((acc, e, i) => {
       (acc[e.operator] = acc[e.operator] || []).push({ data: e, index: i });
@@ -76,9 +98,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }, {});
   }
 
+  // === Gerar lista de erros no dropdown ===
   function generateDropdown() {
     errosDropdown.innerHTML = '';
     const grouped = groupByOperator();
+
     Object.entries(grouped).forEach(([op, arr]) => {
       const opContainer = document.createElement('div');
       opContainer.className = 'operador-erros';
@@ -115,8 +139,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // === Gerar gráfico com os erros por operador ===
   function generateChart() {
     if (errorChart) errorChart.destroy();
+
     const grouped = groupByOperator();
     const labels = Object.keys(grouped).sort((a, b) => a.localeCompare(b, 'pt-BR'));
     const data = labels.map(l => grouped[l].length);
@@ -140,8 +166,15 @@ document.addEventListener('DOMContentLoaded', () => {
         responsive: true,
         maintainAspectRatio: false,
         scales: {
-          x: { beginAtZero: true, ticks: { color: '#f5f5f5' }, grid: { color: '#444' }},
-          y: { ticks: { color: '#f5f5f5' }, grid: { display: false }}
+          x: {
+            beginAtZero: true,
+            ticks: { color: '#f5f5f5' },
+            grid: { color: '#444' }
+          },
+          y: {
+            ticks: { color: '#f5f5f5' },
+            grid: { display: false }
+          }
         },
         plugins: {
           legend: { display: false },
@@ -164,5 +197,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  carregarDados(); // Inicia carregando tudo do Google Sheets
+  // === Inicializar programa carregando os dados ===
+  carregarDados();
 });
